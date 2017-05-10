@@ -14,6 +14,7 @@ namespace Vainyl\Config\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Vainyl\Core\Application\EnvironmentInterface;
 use Vainyl\Core\Extension\AbstractExtension;
 use Vainyl\Core\Exception\MissingRequiredFieldException;
 
@@ -27,7 +28,7 @@ class ConfigExtension extends AbstractExtension
     /**
      * @inheritDoc
      */
-    public function load(array $configs, ContainerBuilder $container): AbstractExtension
+    public function load(array $configs, ContainerBuilder $container, EnvironmentInterface $environment = null): AbstractExtension
     {
         foreach ($configs as $config) {
             if (false === array_key_exists('config', $config)) {
@@ -52,6 +53,6 @@ class ConfigExtension extends AbstractExtension
             ->addCompilerPass(new ConfigCompilerPass())
             ->addCompilerPass(new ConfigSourceCompilerPass());
 
-        return parent::load($configs, $container);
+        return parent::load($configs, $container, $environment);
     }
 }
