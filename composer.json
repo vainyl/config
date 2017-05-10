@@ -1,0 +1,28 @@
+{
+    "name": "vainyl/config",
+    "type": "shared-package",
+    "authors": [
+        {
+            "name": "Taras Girnyk",
+            "email": "taras.p.gyrnik@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vainyl\\Config\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0",
+        "vainyl/core": "dev-master",
+        "vainyl/data": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://satis.vainyl.com:444"
+        }
+    ],
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,10 @@
+services:
+  config.source.chain:
+    class: Vainyl\Config\Chain\ConfigSourceChain
+  config.source: '@config.source.chain'
+  config.factory:
+    class: Vainyl\Config\Factory\ConfigFactory
+  config.storage:
+    parent: storage.proxy
+    class: Vainyl\Config\Storage\ConfigStorage
+    arguments: ['@config.source.chain', '@config.factory']
