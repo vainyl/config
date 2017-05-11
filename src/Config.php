@@ -12,17 +12,17 @@ declare(strict_types=1);
 
 namespace Vainyl\Config;
 
-use Ds\Map;
 use Vainyl\Config\Exception\UnknownConfigPathException;
 use Vainyl\Config\Factory\ConfigFactoryInterface;
-use Vainyl\Core\Storage\Proxy\AbstractStorageProxy;
+use Vainyl\Core\Storage\Decorator\AbstractStorageDecorator;
+use Vainyl\Core\Storage\StorageInterface;
 
 /**
  * Class Config
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class Config extends AbstractStorageProxy implements ConfigInterface
+class Config extends AbstractStorageDecorator implements ConfigInterface
 {
     private $name;
 
@@ -32,10 +32,10 @@ class Config extends AbstractStorageProxy implements ConfigInterface
      * Config constructor.
      *
      * @param string                 $name
-     * @param Map                    $configData
+     * @param StorageInterface       $configData
      * @param ConfigFactoryInterface $configFactory
      */
-    public function __construct(string $name, Map $configData, ConfigFactoryInterface $configFactory)
+    public function __construct(string $name, StorageInterface $configData, ConfigFactoryInterface $configFactory)
     {
         $this->name = $name;
         $this->configFactory = $configFactory;
