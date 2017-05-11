@@ -94,7 +94,7 @@ class ConfigSourceChain extends AbstractSource implements ConfigSourceInterface
         /**
          * @var ConfigSourceInterface $source
          */
-        foreach (($copy = $this->sources->copy()) as $source) {
+        foreach (($copy = clone $this->sources) as $source) {
             if (null === ($configData = $source->getData($descriptor))) {
                 continue;
             }
