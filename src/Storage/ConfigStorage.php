@@ -12,19 +12,19 @@ declare(strict_types=1);
 
 namespace Vainyl\Config\Storage;
 
-use Ds\Map;
 use Vainyl\Config\ConfigDescriptor;
 use Vainyl\Config\ConfigInterface;
 use Vainyl\Config\ConfigSourceInterface;
 use Vainyl\Config\Factory\ConfigFactoryInterface;
-use Vainyl\Core\Storage\Proxy\AbstractStorageProxy;
+use Vainyl\Core\Storage\Decorator\AbstractStorageDecorator;
+use Vainyl\Core\Storage\StorageInterface;
 
 /**
  * Class ConfigStorage
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class ConfigStorage extends AbstractStorageProxy
+class ConfigStorage extends AbstractStorageDecorator
 {
     private $configFactory;
 
@@ -33,12 +33,12 @@ class ConfigStorage extends AbstractStorageProxy
     /**
      * ConfigStorage constructor.
      *
-     * @param Map                    $storage
+     * @param StorageInterface                    $storage
      * @param ConfigSourceInterface  $configSource
      * @param ConfigFactoryInterface $configFactory
      */
     public function __construct(
-        Map $storage,
+        StorageInterface $storage,
         ConfigSourceInterface $configSource,
         ConfigFactoryInterface $configFactory
     ) {
