@@ -36,13 +36,13 @@ class ConfigCompilerPass extends AbstractCompilerPass
 
         foreach ($container->findTaggedServiceIds('config') as $id => $tags) {
             foreach ($tags as $attributes) {
-                if (false === array_key_exists('alias', $attributes)) {
-                    throw new MissingRequiredFieldException($container, 'config', $attributes, 'alias');
+                if (false === array_key_exists('file', $attributes)) {
+                    throw new MissingRequiredFieldException($container, 'config', $attributes, 'file');
                 }
                 $container
                     ->getDefinition($id)
                     ->setFactory([new Reference('config.storage'), 'getConfig'])
-                    ->setArguments([$attributes['alias']]);
+                    ->setArguments([$attributes['file']]);
             }
         }
     }
