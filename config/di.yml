@@ -4,6 +4,7 @@ services:
   config.source: '@config.source.chain'
   config.factory:
     class: Vainyl\Config\Factory\ConfigFactory
+    arguments: ['@storage.prototype']
   config.storage:
     class: Vainyl\Config\Storage\ConfigStorage
     arguments: ['@storage.prototype', '@config.source.chain', '@config.factory']
