@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace Vainyl\Config\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Vainyl\Core\Extension\AbstractCompilerPass;
+use Vainyl\Core\Exception\MissingRequiredFieldException;
 use Vainyl\Core\Exception\MissingRequiredServiceException;
+use Vainyl\Core\Extension\AbstractCompilerPass;
 
 /**
  * Class ConfigCompilerPass
@@ -33,10 +34,15 @@ class ConfigCompilerPass extends AbstractCompilerPass
         }
 
         foreach ($container->findTaggedServiceIds('config') as $id => $tags) {
-            $container
-                ->getDefinition($id)
-                ->setFactory(['config.storage', 'getConfig'])
-                ->setArguments(str_replace('config.', '', 1));
+            foreach ($tags as $attributes) {
+                if (false === array_key_exists('alias', $attributes)) {
+                    throw new MissingRequiredFieldException($container, 'config', $attributes, 'alias');
+                }
+                $container
+                    ->getDefinition($id)
+                    ->setFactory(['config.storage', 'getConfig'])
+                    ->setArguments([$attributes['alias']]);
+            }
         }
     }
 }
