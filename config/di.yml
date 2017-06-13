@@ -4,6 +4,8 @@ services:
   config.source: '@config.source.chain'
   config.source.yaml:
     class: Vainyl\Config\Source\YamlConfigSource
+    tags:
+      - {name: 'config.source', priority: 100}
   config.factory:
     class: Vainyl\Config\Factory\ConfigFactory
     arguments: ['@storage.prototype']
