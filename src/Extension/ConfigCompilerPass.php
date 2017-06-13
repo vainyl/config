@@ -42,7 +42,7 @@ class ConfigCompilerPass extends AbstractCompilerPass
                 $container
                     ->getDefinition($id)
                     ->setFactory([new Reference('config.storage'), 'getConfig'])
-                    ->setArguments([$attributes['file']]);
+                    ->setArguments([$attributes['file'], new Reference('app.environment')]);
             }
         }
     }

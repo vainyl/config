@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Vainyl\Config;
+namespace Vainyl\Config\Source;
 
 use Vainyl\Data\DescriptorInterface;
 use Vainyl\Data\SourceInterface;
@@ -27,5 +27,5 @@ interface ConfigSourceInterface extends SourceInterface
      *
      * @return array
      */
-    public function getData(DescriptorInterface $descriptor): ?array;
+    public function getData(DescriptorInterface $descriptor);
 }

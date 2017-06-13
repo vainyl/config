@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Vainyl\Config;
 
 use Vainyl\Core\AbstractIdentifiable;
+use Vainyl\Core\Application\EnvironmentInterface;
 use Vainyl\Data\DescriptorInterface;
 
 /**
@@ -24,14 +25,18 @@ class ConfigDescriptor extends AbstractIdentifiable implements DescriptorInterfa
 {
     private $name;
 
+    private $environment;
+
     /**
      * ConfigDescriptor constructor.
      *
      * @param string $name
+     * @param EnvironmentInterface $environment
      */
-    public function __construct(string $name)
+    public function __construct(string $name, EnvironmentInterface $environment)
     {
         $this->name = $name;
+        $this->environment = $environment;
     }
 
     /**

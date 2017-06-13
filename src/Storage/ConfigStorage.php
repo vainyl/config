@@ -14,8 +14,9 @@ namespace Vainyl\Config\Storage;
 
 use Vainyl\Config\ConfigDescriptor;
 use Vainyl\Config\ConfigInterface;
-use Vainyl\Config\ConfigSourceInterface;
+use Vainyl\Config\Source\ConfigSourceInterface;
 use Vainyl\Config\Factory\ConfigFactoryInterface;
+use Vainyl\Core\Application\EnvironmentInterface;
 use Vainyl\Core\Storage\Decorator\AbstractStorageDecorator;
 use Vainyl\Core\Storage\StorageInterface;
 
@@ -33,7 +34,7 @@ class ConfigStorage extends AbstractStorageDecorator
     /**
      * ConfigStorage constructor.
      *
-     * @param StorageInterface                    $storage
+     * @param StorageInterface       $storage
      * @param ConfigSourceInterface  $configSource
      * @param ConfigFactoryInterface $configFactory
      */
@@ -48,18 +49,19 @@ class ConfigStorage extends AbstractStorageDecorator
     }
 
     /**
-     * @param string $configName
+     * @param string               $configName
+     * @param EnvironmentInterface $environment
      *
      * @return ConfigInterface
      */
-    public function getConfig(string $configName): ConfigInterface
+    public function getConfig(string $configName, EnvironmentInterface $environment): ConfigInterface
     {
         if (false === $this->offsetExists($configName)) {
             $this->offsetSet(
                 $configName,
                 $this->configFactory->createConfig(
                     $configName,
-                    $this->configSource->getData(new ConfigDescriptor($configName))
+                    $this->configSource->getData(new ConfigDescriptor($configName, $environment))
                 )
             );
         }

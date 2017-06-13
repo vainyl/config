@@ -1,9 +1,12 @@
 services:
   config.source.chain:
     class: Vainyl\Config\Chain\ConfigSourceChain
+  config.source: '@config.source.chain'
+  config.source.yaml:
+    class: Vainyl\Config\Source\YamlConfigSource
   config.factory:
     class: Vainyl\Config\Factory\ConfigFactory
     arguments: ['@storage.prototype']
   config.storage:
     class: Vainyl\Config\Storage\ConfigStorage
-    arguments: ['@storage.prototype', '@config.source.chain', '@config.factory']
+    arguments: ['@storage.prototype', '@config.source', '@config.factory']
