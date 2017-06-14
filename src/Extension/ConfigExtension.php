@@ -12,11 +12,7 @@ declare(strict_types=1);
 
 namespace Vainyl\Config\Extension;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Vainyl\Core\Application\EnvironmentInterface;
 use Vainyl\Core\Extension\AbstractExtension;
-use Vainyl\Core\Exception\MissingRequiredFieldException;
 
 /**
  * Class ConfigExtension
@@ -28,12 +24,8 @@ class ConfigExtension extends AbstractExtension
     /**
      * @inheritDoc
      */
-    public function load(array $configs, ContainerBuilder $container): AbstractExtension
+    public function getCompilerPasses(): array
     {
-        $container
-            ->addCompilerPass(new ConfigCompilerPass())
-            ->addCompilerPass(new ConfigSourceCompilerPass());
-
-        return parent::load($configs, $container);
+        return [new ConfigCompilerPass(), new ConfigSourceCompilerPass()];
     }
 }
