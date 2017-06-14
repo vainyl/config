@@ -44,6 +44,6 @@ class ConfigDescriptor extends AbstractIdentifiable implements DescriptorInterfa
      */
     public function __toString(): string
     {
-        return $this->name;
+        return $this->environment->getConfigDirectory() . DIRECTORY_SEPARATOR . $this->name;
     }
 }
