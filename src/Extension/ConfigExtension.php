@@ -28,7 +28,7 @@ class ConfigExtension extends AbstractExtension
     /**
      * @inheritDoc
      */
-    public function load(array $configs, ContainerBuilder $container, EnvironmentInterface $environment = null): AbstractExtension
+    public function load(array $configs, ContainerBuilder $container): AbstractExtension
     {
         foreach ($configs as $config) {
             if (false === array_key_exists('config', $config)) {
@@ -53,6 +53,6 @@ class ConfigExtension extends AbstractExtension
             ->addCompilerPass(new ConfigCompilerPass())
             ->addCompilerPass(new ConfigSourceCompilerPass());
 
-        return parent::load($configs, $container, $environment);
+        return parent::load($configs, $container);
     }
 }
