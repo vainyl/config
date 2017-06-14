@@ -39,10 +39,11 @@ class ConfigCompilerPass extends AbstractCompilerPass
                 if (false === array_key_exists('file', $attributes)) {
                     throw new MissingRequiredFieldException($container, 'config', $attributes, 'file');
                 }
+
                 $container
                     ->getDefinition($id)
                     ->setFactory([new Reference('config.storage'), 'getConfig'])
-                    ->setArguments([$attributes['file'], new Reference('app.environment')]);
+                    ->setArguments([$attributes['file'], new Reference('app.environment'), $attributes['path'] ?? '/']);
             }
         }
     }

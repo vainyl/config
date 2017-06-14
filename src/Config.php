@@ -55,6 +55,10 @@ class Config extends AbstractStorageDecorator implements ConfigInterface
      */
     public function getConfig(string $path): ConfigInterface
     {
+        if ('' === $path) {
+            return $this;
+        }
+
         $configData = $this;
         foreach (explode('.', $path) as $pathElement) {
             if (false === $configData->offsetExists($pathElement)) {
