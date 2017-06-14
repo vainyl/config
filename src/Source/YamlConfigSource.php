@@ -14,6 +14,7 @@ namespace Vainyl\Config\Source;
 
 use Symfony\Component\Yaml\Yaml;
 use Vainyl\Config\ConfigDescriptor;
+use Vainyl\Config\Exception\NonReadableFileException;
 use Vainyl\Data\AbstractSource;
 use Vainyl\Data\DescriptorInterface;
 
@@ -37,10 +38,14 @@ class YamlConfigSource extends AbstractSource implements ConfigSourceInterface
      */
     public function doGetData(DescriptorInterface $descriptor)
     {
+        if (false === is_readable($descriptor->__toString())) {
+            throw new NonReadableFileException($this, $descriptor);
+        }
+
         /**
          * @var ConfigDescriptor $descriptor
          */
-        return Yaml::parse($descriptor->__toString());
+        return Yaml::parse(file_get_contents($descriptor->__toString()));
     }
 
     /**
