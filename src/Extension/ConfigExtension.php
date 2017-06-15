@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace Vainyl\Config\Extension;
 
-use Vainyl\Core\Extension\AbstractExtension;
+use Vainyl\Core\Extension\AbstractFrameworkExtension;
 
 /**
  * Class ConfigExtension
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class ConfigExtension extends AbstractExtension
+class ConfigExtension extends AbstractFrameworkExtension
 {
     /**
      * @inheritDoc
