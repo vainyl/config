@@ -14,8 +14,9 @@ namespace Vainyl\Config\Storage;
 
 use Vainyl\Config\ConfigDescriptor;
 use Vainyl\Config\ConfigInterface;
-use Vainyl\Config\ConfigSourceInterface;
+use Vainyl\Config\Source\ConfigSourceInterface;
 use Vainyl\Config\Factory\ConfigFactoryInterface;
+use Vainyl\Core\Application\EnvironmentInterface;
 use Vainyl\Core\Storage\Decorator\AbstractStorageDecorator;
 use Vainyl\Core\Storage\StorageInterface;
 
@@ -33,7 +34,7 @@ class ConfigStorage extends AbstractStorageDecorator
     /**
      * ConfigStorage constructor.
      *
-     * @param StorageInterface                    $storage
+     * @param StorageInterface       $storage
      * @param ConfigSourceInterface  $configSource
      * @param ConfigFactoryInterface $configFactory
      */
@@ -48,22 +49,26 @@ class ConfigStorage extends AbstractStorageDecorator
     }
 
     /**
-     * @param string $configName
+     * @param string               $configName
+     * @param EnvironmentInterface $environment
+     * @param string $path
      *
      * @return ConfigInterface
      */
-    public function getConfig(string $configName): ConfigInterface
+    public function getConfig(string $configName, EnvironmentInterface $environment, string $path = '/'): ConfigInterface
     {
-        if (false === $this->offsetExists($configName)) {
+        $pathName = sprintf('%s.%', $configName, $path);
+
+        if (false === $this->offsetExists($pathName)) {
             $this->offsetSet(
-                $configName,
+                $pathName,
                 $this->configFactory->createConfig(
                     $configName,
-                    $this->configSource->getData(new ConfigDescriptor($configName))
-                )
+                    $this->configSource->getData(new ConfigDescriptor($configName, $environment))
+                )->getConfig($path)
             );
         }
 
-        return $this->offsetGet($configName);
+        return $this->offsetGet($pathName);
     }
 }

@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Vainyl\Config\Factory;
 
-use Ds\Map;
 use Vainyl\Config\Config;
 use Vainyl\Config\ConfigInterface;
 use Vainyl\Core\AbstractIdentifiable;
+use Vainyl\Core\Storage\StorageInterface;
 
 /**
  * Class ConfigFactory
@@ -24,11 +24,23 @@ use Vainyl\Core\AbstractIdentifiable;
  */
 class ConfigFactory extends AbstractIdentifiable implements ConfigFactoryInterface
 {
+    private $storage;
+
+    /**
+     * ConfigFactory constructor.
+     *
+     * @param StorageInterface $storage
+     */
+    public function __construct(StorageInterface $storage)
+    {
+        $this->storage = $storage;
+    }
+
     /**
      * @inheritDoc
      */
     public function createConfig(string $name, array $configData): ConfigInterface
     {
-        return new Config($name, new Map($configData), $this);
+        return new Config($name, $this->storage->fromArray($configData), $this);
     }
 }

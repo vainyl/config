@@ -15,7 +15,7 @@ namespace Vainyl\Config\Chain;
 use Ds\PriorityQueue;
 use Ds\Vector;
 use Vainyl\Config\ConfigDescriptor;
-use Vainyl\Config\ConfigSourceInterface;
+use Vainyl\Config\Source\ConfigSourceInterface;
 use Vainyl\Data\AbstractSource;
 use Vainyl\Data\DescriptorInterface;
 use Vainyl\Data\Exception\CannotRetrieveDataException;
@@ -89,7 +89,7 @@ class ConfigSourceChain extends AbstractSource implements ConfigSourceInterface
     /**
      * @inheritDoc
      */
-    public function doGetData(DescriptorInterface $descriptor): array
+    public function doGetData(DescriptorInterface $descriptor)
     {
         /**
          * @var ConfigSourceInterface $source
