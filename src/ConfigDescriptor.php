@@ -30,7 +30,7 @@ class ConfigDescriptor extends AbstractIdentifiable implements DescriptorInterfa
     /**
      * ConfigDescriptor constructor.
      *
-     * @param string $name
+     * @param string               $name
      * @param EnvironmentInterface $environment
      */
     public function __construct(string $name, EnvironmentInterface $environment)
