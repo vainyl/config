@@ -1,6 +1,7 @@
 services:
   config.source.chain:
     class: Vainyl\Config\Chain\ConfigSourceChain
+    arguments: ['@priority.queue.prototype', '@vector.prototype']
   config.source: '@config.source.chain'
   config.source.yaml:
     class: Vainyl\Config\Source\YamlConfigSource

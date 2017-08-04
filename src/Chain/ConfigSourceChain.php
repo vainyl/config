@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Vainyl\Config\Chain;
 
-use Ds\PriorityQueue;
-use Ds\Vector;
 use Vainyl\Config\ConfigDescriptor;
 use Vainyl\Config\Source\ConfigSourceInterface;
+use Vainyl\Core\Collection\VectorInterface;
+use Vainyl\Core\Queue\PriorityQueueInterface;
 use Vainyl\Data\AbstractSource;
 use Vainyl\Data\DescriptorInterface;
 use Vainyl\Data\Exception\CannotRetrieveDataException;
@@ -27,17 +27,20 @@ use Vainyl\Data\Exception\CannotRetrieveDataException;
  */
 class ConfigSourceChain extends AbstractSource implements ConfigSourceInterface
 {
-    private $sources;
-
     private $queue;
+
+    private $sources;
 
     /**
      * ConfigSourceChain constructor.
+     *
+     * @param PriorityQueueInterface $queue
+     * @param VectorInterface        $vector
      */
-    public function __construct()
+    public function __construct(PriorityQueueInterface $queue, VectorInterface $vector)
     {
-        $this->sources = new Vector();
-        $this->queue = new PriorityQueue();
+        $this->queue = $queue;
+        $this->sources = $vector;
     }
 
     /**
@@ -56,7 +59,7 @@ class ConfigSourceChain extends AbstractSource implements ConfigSourceInterface
      */
     public function addSource(int $priority, ConfigSourceInterface $configSource): ConfigSourceChain
     {
-        $this->queue->push($configSource, $priority);
+        $this->queue->enqueue($configSource, $priority);
 
         return $this->configure();
     }
@@ -67,13 +70,11 @@ class ConfigSourceChain extends AbstractSource implements ConfigSourceInterface
     public function configure(): ConfigSourceChain
     {
         $queue = clone $this->queue;
-        $list = new Vector();
+        $this->sources->clear();
 
-        while (false === $queue->isEmpty()) {
-            $list->push($queue->pop());
+        while (false === $queue->valid()) {
+            $this->sources->push($queue->dequeue());
         }
-
-        $this->sources = $list;
 
         return $this;
     }
@@ -94,7 +95,7 @@ class ConfigSourceChain extends AbstractSource implements ConfigSourceInterface
         /**
          * @var ConfigSourceInterface $source
          */
-        foreach (($copy = clone $this->sources) as $source) {
+        foreach ($this->sources as $source) {
             if (null === ($configData = $source->getData($descriptor))) {
                 continue;
             }
