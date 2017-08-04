@@ -1,6 +1,7 @@
 services:
   config.source.chain:
     class: Vainyl\Config\Chain\ConfigSourceChain
+    arguments: ['@priority.queue.prototype', '@vector.prototype']
   config.source: '@config.source.chain'
   config.source.yaml:
     class: Vainyl\Config\Source\YamlConfigSource
@@ -8,7 +9,7 @@ services:
       - {name: 'config.source', priority: 100}
   config.factory:
     class: Vainyl\Config\Factory\ConfigFactory
-    arguments: ['@storage.prototype']
+    arguments: ['@map.prototype']
   config.storage:
     class: Vainyl\Config\Storage\ConfigStorage
-    arguments: ['@storage.prototype', '@config.source', '@config.factory']
+    arguments: ['@map.prototype', '@config.source', '@config.factory']
