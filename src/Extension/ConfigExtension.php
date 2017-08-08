@@ -26,6 +26,6 @@ class ConfigExtension extends AbstractFrameworkExtension
      */
     public function getCompilerPasses(): array
     {
-        return [new ConfigCompilerPass(), new ConfigSourceCompilerPass()];
+        return [[new ConfigCompilerPass()], [new ConfigSourceCompilerPass()]];
     }
 }
