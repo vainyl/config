@@ -41,6 +41,6 @@ class ConfigFactory extends AbstractIdentifiable implements ConfigFactoryInterfa
      */
     public function createConfig(string $name, array $configData): ConfigInterface
     {
-        return new Config($name, $this->storage->fromArray($configData), $this);
+        return new Config($name, (clone $this->storage)->fromArray($configData), $this);
     }
 }

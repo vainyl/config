@@ -19,11 +19,11 @@ use Vainyl\Core\Exception\MissingRequiredFieldException;
 use Vainyl\Core\Exception\MissingRequiredServiceException;
 
 /**
- * Class ConfigSourceCompilerPass
+ * Class ConfigSinkCompilerPass
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class ConfigSourceCompilerPass extends AbstractCompilerPass
+class ConfigSinkCompilerPass extends AbstractCompilerPass
 {
     /**
      * @inheritDoc
@@ -35,12 +35,12 @@ class ConfigSourceCompilerPass extends AbstractCompilerPass
         }
 
         $definition = $container->getDefinition('config.base.chain');
-        foreach ($container->findTaggedServiceIds('config.source') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('config.sink') as $id => $tags) {
             foreach ($tags as $attributes) {
                 if (false === array_key_exists('priority', $attributes)) {
                     throw new MissingRequiredFieldException($container, $id, $attributes, 'priority');
                 }
-                $definition->addMethodCall('addSource', [$attributes['priority'], new Reference($id)]);
+                $definition->addMethodCall('addSink', [$attributes['priority'], new Reference($id)]);
             }
         }
     }
