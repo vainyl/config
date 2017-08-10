@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Vainyl\Config\Chain;
 
+use Vainyl\Config\ConfigDescriptor;
 use Vainyl\Core\Collection\VectorInterface;
 use Vainyl\Core\Queue\PriorityQueueInterface;
 use Vainyl\Data\AbstractBase;
@@ -149,22 +150,6 @@ class ConfigBaseChain extends AbstractBase implements SourceInterface, SinkInter
      */
     public function supports(DescriptorInterface $descriptor): bool
     {
-        foreach ($this->sources as $source) {
-            if (false === $source->supports($descriptor)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        foreach ($this->sinks as $sink) {
-            if (false === $sink->supports($descriptor)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
+        return $descriptor instanceof ConfigDescriptor;
     }
 }
