@@ -58,19 +58,23 @@ class ConfigStorage extends AbstractStorageDecorator
     public function getConfig(
         string $configName,
         EnvironmentInterface $environment,
-        string $path = '/'
+        string $path = ''
     ): ConfigInterface {
-        $pathName = sprintf('%s.%', $configName, $path);
+        $pathName = sprintf('%s.%s', $configName, $path);
+        if ($this->offsetExists($pathName)) {
+            return $this->offsetGet($pathName);
+        }
 
-        if (false === $this->offsetExists($pathName)) {
+        if (false === $this->offsetExists($configName)) {
             $this->offsetSet(
-                $pathName,
-                $this->configFactory->createConfig(
+                $configName,
+                $config = $this->configFactory->createConfig(
                     $configName,
                     $this->source->getData(new ConfigDescriptor($configName, $environment))
-                )->getConfig($path)
+                )
             );
         }
+        $this->offsetSet($pathName, $this->offsetGet($configName)->getPath($path));
 
         return $this->offsetGet($pathName);
     }
