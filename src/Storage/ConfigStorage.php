@@ -14,11 +14,11 @@ namespace Vainyl\Config\Storage;
 
 use Vainyl\Config\ConfigDescriptor;
 use Vainyl\Config\ConfigInterface;
-use Vainyl\Config\Source\ConfigSourceInterface;
 use Vainyl\Config\Factory\ConfigFactoryInterface;
 use Vainyl\Core\Application\EnvironmentInterface;
 use Vainyl\Core\Storage\Decorator\AbstractStorageDecorator;
 use Vainyl\Core\Storage\StorageInterface;
+use Vainyl\Data\SourceInterface;
 
 /**
  * Class ConfigStorage
@@ -29,21 +29,21 @@ class ConfigStorage extends AbstractStorageDecorator
 {
     private $configFactory;
 
-    private $configSource;
+    private $source;
 
     /**
      * ConfigStorage constructor.
      *
      * @param StorageInterface       $storage
-     * @param ConfigSourceInterface  $configSource
+     * @param SourceInterface        $source
      * @param ConfigFactoryInterface $configFactory
      */
     public function __construct(
         StorageInterface $storage,
-        ConfigSourceInterface $configSource,
+        SourceInterface $source,
         ConfigFactoryInterface $configFactory
     ) {
-        $this->configSource = $configSource;
+        $this->source = $source;
         $this->configFactory = $configFactory;
         parent::__construct($storage);
     }
@@ -58,19 +58,23 @@ class ConfigStorage extends AbstractStorageDecorator
     public function getConfig(
         string $configName,
         EnvironmentInterface $environment,
-        string $path = '/'
+        string $path = ''
     ): ConfigInterface {
-        $pathName = sprintf('%s.%', $configName, $path);
+        $pathName = sprintf('%s.%s', $configName, $path);
+        if ($this->offsetExists($pathName)) {
+            return $this->offsetGet($pathName);
+        }
 
-        if (false === $this->offsetExists($pathName)) {
+        if (false === $this->offsetExists($configName)) {
             $this->offsetSet(
-                $pathName,
-                $this->configFactory->createConfig(
+                $configName,
+                $config = $this->configFactory->createConfig(
                     $configName,
-                    $this->configSource->getData(new ConfigDescriptor($configName, $environment))
-                )->getConfig($path)
+                    $this->source->getData(new ConfigDescriptor($configName, $environment))
+                )
             );
         }
+        $this->offsetSet($pathName, $this->offsetGet($configName)->getPath($path));
 
         return $this->offsetGet($pathName);
     }

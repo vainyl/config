@@ -25,6 +25,8 @@ class ConfigDescriptor extends AbstractIdentifiable implements DescriptorInterfa
 {
     private $name;
 
+    private $cached;
+
     private $environment;
 
     /**
@@ -32,11 +34,13 @@ class ConfigDescriptor extends AbstractIdentifiable implements DescriptorInterfa
      *
      * @param string               $name
      * @param EnvironmentInterface $environment
+     * @param bool                 $cached
      */
-    public function __construct(string $name, EnvironmentInterface $environment)
+    public function __construct(string $name, EnvironmentInterface $environment, bool $cached = false)
     {
         $this->name = $name;
         $this->environment = $environment;
+        $this->cached = $cached;
     }
 
     /**
@@ -44,6 +48,44 @@ class ConfigDescriptor extends AbstractIdentifiable implements DescriptorInterfa
      */
     public function __toString(): string
     {
-        return $this->environment->getConfigDirectory() . DIRECTORY_SEPARATOR . $this->name;
+        return $this->getFileName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName(): string
+    {
+        if (false === $this->cached) {
+            return $this->environment->getConfigDirectory() . DIRECTORY_SEPARATOR . $this->name;
+        }
+
+        return $this->environment->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->name;
+    }
+
+    /**
+     * @return ConfigDescriptor
+     */
+    public function invert(): ConfigDescriptor
+    {
+        $this->cached = !$this->cached;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isReadable(): bool
+    {
+        return is_readable($this->getFileName());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isWritable(): bool
+    {
+        return is_writable($this->getFileName());
     }
 }

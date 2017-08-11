@@ -1,12 +1,18 @@
 services:
-  config.source.chain:
-    class: Vainyl\Config\Chain\ConfigSourceChain
-    arguments: ['@priority.queue.prototype', '@vector.prototype']
-  config.source: '@config.source.chain'
-  config.source.yaml:
-    class: Vainyl\Config\Source\YamlConfigSource
+  config.base.chain:
+    class: Vainyl\Config\Chain\ConfigBaseChain
+    arguments: ['@priority.queue.prototype', '@vector.prototype', '@priority.queue.prototype', '@vector.prototype']
+  config.source: '@config.base.chain'
+  config.sink: '@config.base.chain'
+  config.base.yaml:
+    class: Vainyl\Config\Base\YamlConfigBase
     tags:
       - {name: 'config.source', priority: 100}
+  config.base.php:
+    class: Vainyl\Config\Base\PhpConfigBase
+    tags:
+      - {name: 'config.source', priority: 200}
+      - {name: 'config.sink', priority: 100}
   config.factory:
     class: Vainyl\Config\Factory\ConfigFactory
     arguments: ['@map.prototype']
