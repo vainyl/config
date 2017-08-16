@@ -131,7 +131,7 @@ class ConfigBaseChain extends AbstractBase implements SourceInterface, SinkInter
                 continue;
             }
 
-            $result = $result & $sink->write($descriptor, $data);
+            $result = $result && $sink->write($descriptor, $data);
         }
 
         return $result;
