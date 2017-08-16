@@ -32,7 +32,7 @@ abstract class AbstractConfigException extends AbstractCoreException implements 
      * @param int             $code
      * @param \Exception|null $previous
      */
-    public function __construct(ConfigInterface $config, string $message, int $code = 500, \Exception $previous = null)
+    public function __construct(ConfigInterface $config, string $message, int $code = 500, \Throwable $previous = null)
     {
         $this->config = $config;
         parent::__construct($message, $code, $previous);
