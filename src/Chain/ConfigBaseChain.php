@@ -90,14 +90,14 @@ class ConfigBaseChain extends AbstractBase implements SourceInterface, SinkInter
         $queue = clone $this->sourceQueue;
         $this->sources->clear();
 
-        while (false === $queue->valid()) {
+        while ($queue->valid()) {
             $this->sources->push($queue->dequeue());
         }
 
         $queue = clone $this->sinkQueue;
         $this->sinks->clear();
 
-        while (false === $queue->valid()) {
+        while ($queue->valid()) {
             $this->sinks->push($queue->dequeue());
         }
 
